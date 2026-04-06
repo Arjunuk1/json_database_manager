@@ -16,9 +16,14 @@ async function loadData() {
 }
 
 async function addData() {
-    const input = document.getElementById("nameInput");
-    if (input.value.trim() === "") {
-        alert("Please enter a name");
+    const nameInput = document.getElementById("nameInput");
+    const emailInput = document.getElementById("emailInput");
+
+    const name = nameInput.value.trim();
+    const email = emailInput.value.trim();
+
+    if (name === "" || email === "") {
+        alert("Please fill all fields");
         return;
     }
 
@@ -27,12 +32,12 @@ async function addData() {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-            name: input.value
-        })
+        body: JSON.stringify({ name, email })
     });
 
-    input.value = "";
+    nameInput.value = "";
+    emailInput.value = "";
+
     loadData();
 }
 async function deleteData(id) {

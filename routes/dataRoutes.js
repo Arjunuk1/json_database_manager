@@ -14,13 +14,14 @@ router.get("/all", (req, res) => {
 
 // CREATE new data
 router.post("/create", (req, res) => {
-    const { name } = req.body;
+    const { name, email } = req.body;
 
     const data = JSON.parse(fs.readFileSync(dbPath, "utf8"));
 
     const newUser = {
         id: Date.now(),
-        name: name
+        name,
+        email
     };
     data.push(newUser);
 
