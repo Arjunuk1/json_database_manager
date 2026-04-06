@@ -43,4 +43,26 @@ router.delete("/delete/:id", (req, res) => {
     res.json({ message: "Data deleted" });
 });
 
+router.put("/edit/:id", (req, res) => {
+    const id = Number(req.params.id);
+    const { name, email } = req.body;
+
+    let data = JSON.parse(fs.readFileSync(dbPath, "utf8"));
+
+    data = data.map(item => {
+        if (item.id === id) {
+            return {
+                ...item,
+                name,
+                email
+            };
+        }
+        return item;
+    });
+
+    fs.writeFileSync(dbPath, JSON.stringify(data, null, 2));
+
+    res.json({ message: "Data updated" });
+});
+
 module.exports = router;
