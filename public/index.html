@@ -16,6 +16,14 @@
         <button onclick="addData()">Add Data</button>
 
         <h2>Stored Data</h2>
+        
+        <input
+        type="text"
+        id="searchInput"
+        placeholder="Search by name or email"
+        onkeyup="loadData()"
+        >
+
         <div id="dataList"></div>
     </div>
 
