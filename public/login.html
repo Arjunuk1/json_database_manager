@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Login</h1>
+
+        <input type="text" id="loginUsername" placeholder="Username">
+        <input type="password" id="loginPassword" placeholder="Password">
+
+        <button onclick="loginUser()">Login</button>
+
+        <p>Don't have an account?</p>
+        <a href="register.html">Register</a>
+    </div>
+    <script>
+        async function loginUser() {
+            const username = document.getElementById("loginUsername").value.trim();
+            const password = document.getElementById("loginPassword").value.trim();
+
+            const response = await fetch("/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                localStorage.setItem("loggedIn", "true");
+                localStorage.setItem("username", username);
+                window.location.href = "/";
+            } else {
+                alert(result.message);
+            }
+        }
+        </script>
+        </body>
+</html>
