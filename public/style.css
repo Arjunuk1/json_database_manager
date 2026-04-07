@@ -51,6 +51,39 @@ button[onclick="addData()"] {
     margin-bottom: 20px;
 }
 
+#themeToggle {
+    width: 10%;
+    margin-bottom: 20px;
+    background: #333;
+    color: white;
+}
+
+body.dark {
+    background: linear-gradient(135deg, #121212, #1f1f1f);
+}
+
+body.dark .container {
+    background: #222;
+    color: white;
+}
+
+body.dark h1 {
+    color: #7db7ff;
+}
+body.dark input {
+    background: #333;
+    color: white;
+    border: 1px solid #555;
+}
+
+body.dark .item {
+    background: #2f2f2f;
+}
+
+body.dark .item p {
+    color: #ccc;
+}
+
 .item {
     display: flex;
     justify-content: space-between;
