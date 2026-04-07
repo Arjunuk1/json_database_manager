@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Register</h1>
+
+        <input type="text" id="registerUsername" placeholder="Username">
+        <input type="password" id="registerPassword" placeholder="Password">
+
+        <button onclick="registerUser()">Register</button>
+
+        <p>Already have an account?</p>
+        <a href="login.html">Go to Login</a>
+    </div>
+    <script>
+        async function registerUser() {
+            const username = document.getElementById("registerUsername").value.trim();
+            const password = document.getElementById("registerPassword").value.trim();
+
+            if (!username || !password) {
+                alert("Please fill all fields");
+                return;
+            }
+
+            const response = await fetch("/auth/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            const result = await response.json();
+            alert(result.message);
+            if (response.ok) {
+                window.location.href = "login.html";
+            }
+        }
+    </script>
+</body>
+</html>
