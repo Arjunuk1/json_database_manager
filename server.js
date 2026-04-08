@@ -12,7 +12,9 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Import routes
 const dataRoutes = require("./routes/dataRoutes");
+const authRoutes = require("./routes/authRoutes");
 app.use("/api", dataRoutes);
+app.use("/auth", authRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
