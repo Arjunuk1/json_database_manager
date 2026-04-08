@@ -1,3 +1,7 @@
+if (localStorage.getItem("loggedIn") !== "true") {
+    window.location.href = "login.html";
+}
+
 async function loadData() {
     const response = await fetch("/api/all");
     const data = await response.json();
