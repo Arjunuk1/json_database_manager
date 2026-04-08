@@ -8,6 +8,13 @@ body {
     align-items: center;
 }
 
+#logoutBtn {
+    width: 10%;
+    margin-bottom: 15px;
+    background: #d9534f;
+    color: white;
+}
+
 .container {
     width: 90%;
     max-width: 650px;

@@ -36,6 +36,13 @@ async function loadData() {
     });
 }
 
+document.getElementById("logoutBtn").addEventListener("click", () => {
+    localStorage.removeItem("loggedIn");
+    localStorage.removeItem("username");
+
+    window.location.href = "login.html";
+});
+
 async function addData() {
     const nameInput = document.getElementById("nameInput");
     const emailInput = document.getElementById("emailInput");
