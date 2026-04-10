@@ -72,6 +72,14 @@ async function addData() {
     loadData();
 }
 async function deleteData(id) {
+    const confirmDelete = confirm(
+        "Are you sure nigga you want to delete this record?"
+    );
+
+    if (!confirmDelete) {
+        return;
+    }
+
     await fetch(`/api/delete/${id}`, {
         method: "DELETE"
     });
