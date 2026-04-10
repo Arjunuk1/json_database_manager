@@ -36,6 +36,9 @@ async function loadData() {
     });
 }
 
+document.getElementById("welcomeText").textContent =
+    "Welcome, " + localStorage.getItem("username") + " 👋";
+
 document.getElementById("logoutBtn").addEventListener("click", () => {
     localStorage.removeItem("loggedIn");
     localStorage.removeItem("username");

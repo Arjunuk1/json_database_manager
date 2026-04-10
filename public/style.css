@@ -15,6 +15,18 @@ body {
     color: white;
 }
 
+#welcomeText {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #1e3c72;
+}
+
+body.dark #welcomeText {
+    color: #7db7ff;
+}
+
 .container {
     width: 90%;
     max-width: 650px;
