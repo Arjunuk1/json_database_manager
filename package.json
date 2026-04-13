@@ -4,12 +4,22 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^5.2.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Arjunuk1/json_database_manager.git"
+  },
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Arjunuk1/json_database_manager/issues"
+  },
+  "homepage": "https://github.com/Arjunuk1/json_database_manager#readme"
 }
