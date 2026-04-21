@@ -27,6 +27,36 @@ body.dark #welcomeText {
     color: #7db7ff;
 }
 
+.field-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+#fieldSelect {
+    flex: 1;
+}
+
+.extra-field {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.extra-field input {
+    flex: 1;
+}
+
+.extra-field button {
+    width: 45px;
+    background: #d9534f;
+    color: white;
+}
+
+.item-content {
+    flex: 1;
+}
+
 .container {
     width: 90%;
     max-width: 650px;

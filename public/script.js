@@ -6,29 +6,23 @@ async function loadData() {
     const response = await fetch("/api/all");
     const data = await response.json();
 
-    const searchValue = document
-        .getElementById("searchInput")
-        .value
-        .toLowerCase();
-
     const dataList = document.getElementById("dataList");
     dataList.innerHTML = "";
 
-    const filtered = data.filter(item =>
-        item.name.toLowerCase().includes(searchValue) ||
-        item.email.toLowerCase().includes(searchValue)
-    );
+    data.forEach(item => {
+        let html = "";
 
-    filtered.forEach(item => {
+        Object.keys(item).forEach(key => {
+            if (key !== "id") {
+                html += `<p><strong>${key}:</strong> ${item[key]}</p>`;
+            }
+        });
+
         dataList.innerHTML += `
             <div class="item">
-                <div>
-                    <h3>${item.name}</h3>
-                    <p>${item.email}</p>
-                </div>
-
+                <div class="item-content">${html}</div>
                 <div class="buttons">
-                    <button class="edit-btn" onclick="editData(${item.id}, '${item.name}', '${item.email}')">Edit</button>
+                    <button class="edit-btn" onclick='editRecord(${JSON.stringify(item)})'>Edit</button>
                     <button class="delete-btn" onclick="deleteData(${item.id})">Delete</button>
                 </div>
             </div>
@@ -99,6 +93,33 @@ async function deleteData(id) {
 
     await fetch(`/api/delete/${id}`, {
         method: "DELETE"
+    });
+
+    loadData();
+}
+
+// EDIT RECORDS
+async function editRecord(record) {
+    const updated = { ...record };
+
+    for (const key in updated) {
+        if (key === "id" || key === "createdAt") continue;
+
+        const value = prompt(`Enter ${key}`, updated[key]);
+
+        if (value !== null) {
+            updated[key] = value;
+        }
+    }
+
+    updated.updatedAt = new Date().toLocaleString();
+
+    await fetch(`/api/edit/${record.id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(updated)
     });
 
     loadData();
