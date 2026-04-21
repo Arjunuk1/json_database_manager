@@ -11,20 +11,38 @@ function encode(value) {
 }
 
 function decode(value) {
-    return Buffer.from(String(value), "base64").toString("utf8");
+    try {
+        return Buffer.from(String(value), "base64").toString("utf8");
+    } catch (error) {
+        return value;
+    }
 }
 
 // GET all data
 router.get("/all", (req, res) => {
-    const decodedData = data.map(item => ({
-    ...item,
-    name: decode(item.name),
-    email: decode(item.email),
-    createdAt: item.createdAt ? decode(item.createdAt) : ""
-}));
+    const data = JSON.parse(fs.readFileSync(dbPath, "utf8"));
 
-res.json(decodedData);
-res.json(data);
+    const decodedData = data.map(item => {
+        const decodedItem = {};
+
+        Object.keys(item).forEach(key => {
+            const value = item[key];
+
+            if (typeof value === "string") {
+                try {
+                    decodedItem[key] = Buffer.from(value, "base64").toString("utf8");
+                } catch {
+                    decodedItem[key] = value;
+                }
+            } else {
+                decodedItem[key] = value;
+            }
+        });
+
+        return decodedItem;
+    });
+
+    res.json(decodedData);
 });
 
 // CREATE new data
