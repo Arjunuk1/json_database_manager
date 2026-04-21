@@ -6,10 +6,25 @@ const router = express.Router();
 
 const dbPath = path.join(__dirname, "..", "database.json");
 
+function encode(value) {
+    return Buffer.from(String(value)).toString("base64");
+}
+
+function decode(value) {
+    return Buffer.from(String(value), "base64").toString("utf8");
+}
+
 // GET all data
 router.get("/all", (req, res) => {
-    const data = JSON.parse(fs.readFileSync(dbPath, "utf8"));
-    res.json(data);
+    const decodedData = data.map(item => ({
+    ...item,
+    name: decode(item.name),
+    email: decode(item.email),
+    createdAt: item.createdAt ? decode(item.createdAt) : ""
+}));
+
+res.json(decodedData);
+res.json(data);
 });
 
 // CREATE new data
@@ -19,10 +34,11 @@ router.post("/create", (req, res) => {
     const data = JSON.parse(fs.readFileSync(dbPath, "utf8"));
 
     const newUser = {
-        id: Date.now(),
-        name,
-        email
-    };
+    id: Date.now(),
+    name: encode(name),
+    email: encode(email),
+    createdAt: encode(new Date().toLocaleString())
+};
     data.push(newUser);
 
     fs.writeFileSync(dbPath, JSON.stringify(data, null, 2));
