@@ -47,41 +47,42 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
 });
 
 async function addData() {
-    const nameInput = document.getElementById("nameInput");
-    const emailInput = document.getElementById("emailInput");
+    const name = document.getElementById("nameInput").value.trim();
+    const email = document.getElementById("emailInput").value.trim();
 
-    const name = nameInput.value.trim();
-    const email = emailInput.value.trim();
-
-    if (name === "" || email === "") {
-        alert("Please fill all fields");
+    if (!name || !email) {
+        alert("Name and Email are required");
         return;
     }
 
-    if (!email.includes("@") || !email.includes(".")) {
-        alert("Please enter a valid email address");
-        return;
-    }
+    const record = {
+        id: Date.now(),
+        name,
+        email,
+        createdAt: new Date().toLocaleString(),
+        updatedAt: new Date().toLocaleString()
+    };
 
-    const response = await fetch("/api/create", {
+    document.querySelectorAll(".extra-field").forEach(fieldDiv => {
+        const input = fieldDiv.querySelector("input");
+
+        if (input.type === "checkbox") {
+            record[input.id] = input.checked;
+        } else {
+            record[input.id] = input.value.trim();
+        }
+    });
+
+    await fetch("/api/create", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-            name,
-            email
-        })
+        body: JSON.stringify(record)
     });
-    const result = await response.json();
-
-    if (!response.ok) {
-        alert(result.message);
-        return;
-    }
-
-    nameInput.value = "";
-    emailInput.value = "";
+    document.getElementById("nameInput").value = "";
+    document.getElementById("emailInput").value = "";
+    extraFields.innerHTML = "";
 
     loadData();
 }
@@ -140,5 +141,51 @@ themeToggle.addEventListener("click", () => {
         localStorage.setItem("theme", "light");
     }
 });
+
+const addFieldBtn = document.getElementById("addFieldBtn");
+const fieldSelect = document.getElementById("fieldSelect");
+const extraFields = document.getElementById("extraFields");
+
+addFieldBtn.addEventListener("click", () => {
+    const field = fieldSelect.value;
+
+    if (!field) {
+        alert("Please choose a field");
+        return;
+    }
+
+    if (document.getElementById(`field-${field}`)) {
+        alert("Field already added");
+        return;
+    }
+
+    const fieldDiv = document.createElement("div");
+    fieldDiv.className = "extra-field";
+    fieldDiv.id = `field-${field}`;
+
+    if (field === "isActive") {
+        fieldDiv.innerHTML = `
+            <label>
+                <input type="checkbox" id="${field}">
+                ${field}
+            </label>
+            <button type="button" onclick="removeField('${field}')">✖</button>
+        `;
+        } else {
+        fieldDiv.innerHTML = `
+            <input type="text" id="${field}" placeholder="Enter ${field}">
+            <button type="button" onclick="removeField('${field}')">✖</button>
+        `;
+    }
+
+    extraFields.appendChild(fieldDiv);
+});
+
+function removeField(field) {
+    const element = document.getElementById(`field-${field}`);
+    if (element) {
+        element.remove();
+    }
+}
 
 loadData();
