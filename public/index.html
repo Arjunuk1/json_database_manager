@@ -12,25 +12,30 @@
         <h1>JSON Database Manager</h1>
         <button id="themeToggle">🌙</button>
 
-        <<h3>Select Fields</h3>
+        <input type="text" id="nameInput" placeholder="Enter name">
+        <input type="email" id="emailInput" placeholder="Enter email">
 
-    <div class="field-options">
-    <label><input type="checkbox" value="name"> Name</label>
-    <label><input type="checkbox" value="email"> Email</label>
-    <label><input type="checkbox" value="username"> Username</label>
-    <label><input type="checkbox" value="password"> Password</label>
-    <label><input type="checkbox" value="phone"> Phone</label>
-    <label><input type="checkbox" value="address"> Address</label>
-    <label><input type="checkbox" value="college"> College</label>
-    <label><input type="checkbox" value="course"> Course</label>
-    <label><input type="checkbox" value="notes"> Notes</label>
-    <label><input type="checkbox" value="tags"> Tags</label>
-    <label><input type="checkbox" value="profileImage"> Profile Image URL</label>
-    <label><input type="checkbox" value="isActive"> Active</label>
+        <div class="field-row">
+        <select id="fieldSelect">
+        <option value="">Choose extra field</option>
+        <option value="phone">Phone</option>
+        <option value="address">Address</option>
+        <option value="username">Username</option>
+        <option value="password">Password</option>
+        <option value="college">College</option>
+        <option value="course">Course</option>
+        <option value="notes">Notes</option>
+        <option value="tags">Tags</option>
+        <option value="profileImage">Profile Image</option>
+        <option value="isActive">isActive</option>
+    </select>
+
+    <button type="button" id="addFieldBtn">Add Field</button>
 </div>
 
-<div id="dynamicFields"></div>
-        <button onclick="addData()">Add Data</button>
+<div id="extraFields"></div>
+
+<button onclick="addData()">Add Data</button>
         
         <button id="logoutBtn">Logout</button>
         <p id="welcomeText"></p>
