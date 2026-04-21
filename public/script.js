@@ -58,19 +58,35 @@ async function addData() {
         return;
     }
 
-    await fetch("/api/create", {
+    if (!email.includes("@") || !email.includes(".")) {
+        alert("Please enter a valid email address");
+        return;
+    }
+
+    const response = await fetch("/api/create", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ name, email })
+        body: JSON.stringify({
+            name,
+            email
+        })
     });
+    const result = await response.json();
+
+    if (!response.ok) {
+        alert(result.message);
+        return;
+    }
 
     nameInput.value = "";
     emailInput.value = "";
 
     loadData();
 }
+
+
 async function deleteData(id) {
     const confirmDelete = confirm(
         "Are you sure nigga you want to delete this record?"
