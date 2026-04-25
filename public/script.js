@@ -102,13 +102,38 @@ async function deleteData(id) {
 async function editRecord(record) {
     const updated = { ...record };
 
-    for (const key in updated) {
-        if (key === "id" || key === "createdAt") continue;
+    const choice = prompt(
+        "Type:\n1 → Edit existing fields\n2 → Add new field"
+    );
 
-        const value = prompt(`Enter ${key}`, updated[key]);
+    // 🔹 OPTION 1: Edit existing
+    if (choice === "1") {
+        for (const key in updated) {
+            if (key === "id" || key === "createdAt") continue;
 
-        if (value !== null) {
-            updated[key] = value;
+            const value = prompt(`Edit ${key}`, updated[key]);
+
+            if (value !== null) {
+                updated[key] = value;
+            }
+        }
+    }
+
+    // 🔹 OPTION 2: Add NEW FIELD
+    else if (choice === "2") {
+        const newField = prompt("Enter new field name");
+
+        if (!newField) return;
+
+        if (updated[newField]) {
+            alert("Field already exists");
+            return;
+        }
+
+        const newValue = prompt(`Enter value for ${newField}`);
+
+        if (newValue !== null) {
+            updated[newField] = newValue;
         }
     }
 
@@ -124,6 +149,7 @@ async function editRecord(record) {
 
     loadData();
 }
+
 
 async function editData(id, currentName, currentEmail) {
     const newName = prompt("Enter new name:", currentName);
