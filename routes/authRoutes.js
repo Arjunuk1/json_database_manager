@@ -2,6 +2,10 @@ const express = require("express");
 const fs = require("fs");
 const path = require("path");
 
+function encodePassword(password) {
+    return Buffer.from(password).toString("base64");
+}
+
 const router = express.Router();
 
 const usersPath = path.join(__dirname, "..", "users.json");
@@ -17,7 +21,10 @@ router.post("/register", (req, res) => {
         return res.status(400).json({ message: "Username already exists" });
     }
 
-    users.push({ username, password });
+    users.push({
+        username,
+        password: encodePassword(password)
+    });
 
     fs.writeFileSync(usersPath, JSON.stringify(users, null, 2));
 
@@ -29,7 +36,7 @@ router.post("/login", (req, res) => {
     const users = JSON.parse(fs.readFileSync(usersPath, "utf8"));
 
     const user = users.find(
-        user => user.username === username && user.password === password
+        (user) => user.username === username && user.password === encodePassword(password)
     );
 
     if (!user) {
