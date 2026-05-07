@@ -46,6 +46,39 @@
         onkeyup="loadData()">
 
         <div id="dataList"></div>
+
+        <div id="editModal" class="modal hidden">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h2>Edit Record</h2>
+                    <button id="closeModal">✖</button>
+                </div>
+
+                <div id="editFields"></div>
+
+                <div class="field-row">
+                    <select id="newFieldSelect">
+                        <option value="">Add extra field</option>
+                        <option value="username">Username</option>
+                        <option value="phone">Phone</option>
+                        <option value="college">College</option>
+                        <option value="course">Course</option>
+                        <option value="notes">Notes</option>
+                        <option value="tags">Tags</option>
+                    </select>
+
+                    <button id="addEditFieldBtn">
+                        Add Field
+                    </button>
+                </div>
+
+                <button id="saveEditBtn">
+                    Save Changes
+                </button>
+
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>
