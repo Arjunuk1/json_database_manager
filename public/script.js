@@ -99,78 +99,96 @@ async function deleteData(id) {
 }
 
 // EDIT RECORDS
-async function editRecord(record) {
-    const updated = { ...record };
+const editModal = document.getElementById("editModal");
+const editFields = document.getElementById("editFields");
 
-    const choice = prompt(
-        "Type:\n1 → Edit existing fields\n2 → Add new field"
-    );
+let currentEditingRecord = null;
 
-    // 🔹 OPTION 1: Edit existing
-    if (choice === "1") {
-        for (const key in updated) {
-            if (key === "id" || key === "createdAt") continue;
+function editRecord(record) {
 
-            const value = prompt(`Edit ${key}`, updated[key]);
+    currentEditingRecord = { ...record };
 
-            if (value !== null) {
-                updated[key] = value;
-            }
+    editFields.innerHTML = "";
+
+    Object.keys(record).forEach(key => {
+
+        if (key === "id") return;
+
+        const input = document.createElement("input");
+
+        input.type = "text";
+        input.value = record[key];
+
+        input.id = `edit-${key}`;
+
+        input.placeholder = key;
+
+        editFields.appendChild(input);
+    });
+
+    editModal.classList.remove("hidden");
+}
+
+document.getElementById("saveEditBtn")
+.addEventListener("click", async () => {
+
+    Object.keys(currentEditingRecord).forEach(key => {
+
+        if (key === "id") return;
+
+        const input = document.getElementById(`edit-${key}`);
+
+        if (input) {
+            currentEditingRecord[key] = input.value;
         }
-    }
+    });
 
-    // 🔹 OPTION 2: Add NEW FIELD
-    else if (choice === "2") {
-        const newField = prompt("Enter new field name");
+    currentEditingRecord.updatedAt =
+        new Date().toLocaleString();
 
-        if (!newField) return;
-
-        if (updated[newField]) {
-            alert("Field already exists");
-            return;
-        }
-
-        const newValue = prompt(`Enter value for ${newField}`);
-
-        if (newValue !== null) {
-            updated[newField] = newValue;
-        }
-    }
-
-    updated.updatedAt = new Date().toLocaleString();
-
-    await fetch(`/api/edit/${record.id}`, {
+    await fetch(`/api/edit/${currentEditingRecord.id}`, {
         method: "PUT",
+
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(updated)
+
+        body: JSON.stringify(currentEditingRecord)
     });
 
-    loadData();
-}
-
-
-async function editData(id, currentName, currentEmail) {
-    const newName = prompt("Enter new name:", currentName);
-    if (newName === null) return;
-
-    const newEmail = prompt("Enter new email:", currentEmail);
-    if (newEmail === null) return;
-
-    await fetch(`/api/edit/${id}`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            name: newName,
-            email: newEmail
-        })
-    });
+    editModal.classList.add("hidden");
 
     loadData();
-}
+});
+
+document.getElementById("closeModal")
+.addEventListener("click", () => {
+    editModal.classList.add("hidden");
+});
+
+document.getElementById("addEditFieldBtn")
+.addEventListener("click", () => {
+
+    const field = document.getElementById("newFieldSelect").value;
+
+    if (!field) return;
+
+    if (document.getElementById(`edit-${field}`)) {
+        alert("Field already exists");
+        return;
+    }
+
+    currentEditingRecord[field] = "";
+
+    const input = document.createElement("input");
+
+    input.type = "text";
+    input.placeholder = field;
+
+    input.id = `edit-${field}`;
+
+    editFields.appendChild(input);
+});
 
 const themeToggle = document.getElementById("themeToggle");
 
