@@ -43,7 +43,12 @@ test("index manager creates, lists, and drops indexes", () => {
     manager.createIndex("email");
 
     assert.equal(manager.hasIndex("email"), true);
-    assert.deepEqual(manager.listIndexes(), ["email"]);
+    assert.deepEqual(manager.listIndexes(), [{
+        field: "email",
+        unique: false,
+        type: "hash",
+        entries: 0
+    }]);
     assert.throws(() => manager.createIndex("email"), /Index already exists/);
 
     manager.dropIndex("email");
@@ -66,7 +71,9 @@ test("collection keeps indexes synchronized on insert, update, and delete", () =
 
     assert.deepEqual(users.createIndex("email"), {
         field: "email",
-        type: "hash"
+        unique: false,
+        type: "hash",
+        entries: 1
     });
 
     const index = users.indexManager.getIndex("email");
