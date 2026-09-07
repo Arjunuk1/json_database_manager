@@ -116,9 +116,17 @@ test("uses indexed candidates while preserving the query builder pipeline", () =
     const query = users.find({ email: "arjun@gmail.com" });
 
     assert.deepEqual(query.explain(), {
-        type: "INDEX_SCAN",
-        field: "email",
-        value: "arjun@gmail.com"
+        filter: { email: "arjun@gmail.com" },
+        plan: {
+            type: "INDEX_SCAN",
+            index: "email",
+            field: "email",
+            value: "arjun@gmail.com",
+            reason: "Indexed equality lookup"
+        },
+        totalDocuments: 3,
+        estimatedCandidates: 2,
+        indexUsed: "email"
     });
     assert.deepEqual(
         query
@@ -129,4 +137,8 @@ test("uses indexed candidates while preserving the query builder pipeline", () =
         [{ name: "Arjun", email: "arjun@gmail.com", age: 25 }]
     );
     assert.deepEqual(candidates, [indexedDocuments[0], indexedDocuments[2]]);
+    assert.deepEqual(query.getStats().plan, query.explain().plan);
+    assert.equal(query.getStats().documentsScanned, 2);
+    assert.equal(query.getStats().resultsReturned, 1);
+    assert.equal(typeof query.getStats().executionTimeMs, "number");
 });
